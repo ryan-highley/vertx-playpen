@@ -7,11 +7,14 @@ import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.StaticHandler;
 
+import java.util.Calendar;
+import java.util.Formatter;
+
 import static io.vertx.core.http.HttpHeaders.CONTENT_TYPE;
 
 public class HttpApplication extends AbstractVerticle {
 
-  protected static final String template = "Hello, %s!";
+  protected static final String template = "I said \"Hello, %1$s!\" at %2$tF %2$tT";
 
   @Override
   public void start(Future<Void> future) {
@@ -42,8 +45,15 @@ public class HttpApplication extends AbstractVerticle {
       name = "World";
     }
 
+    Calendar now = Calendar.getInstance();
+    Formatter formatter = new Formatter();
+    formatter.format(template, name, now);
+    
+    String message = formatter.out().toString();
+    formatter.close();
+    
     JsonObject response = new JsonObject()
-        .put("content", String.format(template, name));
+        .put("content", message);
 
     rc.response()
         .putHeader(CONTENT_TYPE, "application/json; charset=utf-8")

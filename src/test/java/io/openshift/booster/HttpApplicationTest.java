@@ -12,6 +12,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.Calendar;
+
 import static io.openshift.booster.HttpApplication.template;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -46,7 +48,7 @@ public class HttpApplicationTest {
                 context.assertTrue(resp.succeeded());
                 context.assertEquals(resp.result().statusCode(), 200);
                 String content = resp.result().bodyAsJsonObject().getString("content");
-                context.assertEquals(content, String.format(template, "World"));
+                context.assertEquals(content, String.format(template, "World", Calendar.getInstance()));
                 async.complete();
             });
     }
@@ -60,7 +62,7 @@ public class HttpApplicationTest {
                 context.assertTrue(resp.succeeded());
                 context.assertEquals(resp.result().statusCode(), 200);
                 String content = resp.result().bodyAsJsonObject().getString("content");
-                context.assertEquals(content, String.format(template, "Charles"));
+                context.assertEquals(content, String.format(template, "Charles", Calendar.getInstance()));
                 async.complete();
             });
     }
